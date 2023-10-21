@@ -11,6 +11,8 @@ const AuthStateWrapper: FC<LayoutProps> = ({children}) => {
     useEffect(() => {
         if (token) {
             setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
         }
     }, []);
 

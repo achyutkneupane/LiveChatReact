@@ -7,15 +7,10 @@ import {useEffect, useState} from "react";
 import CenterSpinner from "@chatComponents/Utils/CenterSpinner.tsx";
 import {loginUser} from "@chatUtils/fetchers/authFetcher.ts";
 import {LOGIN_TOKEN} from "@chatSys/env";
-import {useNavigate} from "react-router-dom";
-
-export interface LoginPayload {
-    username: string;
-    password: string;
-}
+import {Link, useNavigate} from "react-router-dom";
+import type {LoginPayload} from "@chatTypes/payload.ts";
 
 const Login = () => {
-
     const nav = useNavigate();
 
     const [defaultValues, setDefaultValues] = useState<LoginPayload|null>(null);
@@ -34,12 +29,15 @@ const Login = () => {
         <div className="w-screen h-screen flex bg-primary justify-center items-center select-none">
             {defaultValues ? (
                 <HookFormProvider defaultValues={defaultValues!}>
-                    <HookForm onSubmit={handleLogin}>
+                    <HookForm onSubmit={(data : LoginPayload) => handleLogin(data)}>
                         <div className="bg-white p-8 rounded-2xl flex flex-col gap-2">
                             <HOne className="text-center">Login</HOne>
                             <InputText name="username" label="Username" type="text" required/>
                             <InputPassword name="password" label="Password" required/>
                             <Button type="submit">Login</Button>
+                            <div className="text-center">
+                                Not a user yet? <Link to="/register" className="text-primary">Register</Link>
+                            </div>
                         </div>
                     </HookForm>
                 </HookFormProvider>
