@@ -1,8 +1,18 @@
 import {Link} from "react-router-dom";
-import {thePageTitle} from "@chatHooks/usePageTitle.ts";
+import {setActiveChat} from "@chatUtils/helpers.ts";
 
 const ChatSystem = () => {
-    thePageTitle("Chat System One");
+
+    setActiveChat("Chat System One");
+
+    // clearInterval(setInterval(() => {
+    //     if (pageTitle === "Notification found") {
+    //         setPageTitle(activeChatBox);
+    //     } else {
+    //         setPageTitle("Notification found");
+    //     }
+    // }, 1000));
+
     return (
         <>
             <Link to="/two">Go to Chat System Two</Link>

@@ -1,8 +1,8 @@
-import {thePageTitle} from "@chatHooks/usePageTitle.ts";
 import {Link} from "react-router-dom";
+import {setActiveChat} from "@chatUtils/helpers.ts";
 
 const ChatSystem2 = () => {
-    thePageTitle("Chat System Two");
+    setActiveChat("Chat System Two");
     return (
         <>
             <Link to="/">Go to Chat System One</Link>
