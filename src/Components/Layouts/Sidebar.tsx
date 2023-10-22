@@ -1,4 +1,5 @@
 import {AiFillSetting} from "react-icons/ai";
+import moment from "moment";
 
 interface ChatBoxItemProps {
     name: string;
@@ -39,7 +40,7 @@ const Sidebar = () => {
             lastMessage: "This is me Alice",
             lastMessageTime: "2021-10-10 12:00:00",
             iAmLastSender: true,
-            isUnread: false,
+            isUnread: true,
         }, {
             name: "Bob Doe",
             lastMessage: "Hello Achyut",
@@ -108,13 +109,23 @@ const Sidebar = () => {
                 <div className="mt-3 flex flex-col gap-2">
                     {items.map((item, index) => (
                         <div key={index} className="flex flex-row justify-start items-center border border-primary border-opacity-40 p-4 rounded-2xl">
-                            <div className="w-10 h-10 bg-primary rounded-full relative">
+                            <div className="w-10 h-10 bg-primary rounded-full relative flex justify-center items-center text-center">
                                 {item.isUnread && (
                                     <div className="w-3 h-3 bg-red-500 rounded-full absolute top-0 right-0"></div>
                                 )}
+                                <h1 className="text-xl text-white text-center">{item.name[0]}</h1>
                             </div>
-                            <div className="ml-2">
-                                <h1 className={`text-base ${item.isUnread ? "font-bold" : ""} text-primary`}>{item.name}</h1>
+                            <div className="ml-2 w-full h-full">
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <h1 className={`text-base ${item.isUnread ? "font-bold" : ""} text-primary`}>{item.name}</h1>
+                                    </div>
+                                    <div>
+                                        <h2 className={`text-sm text-gray-400`}>
+                                            {moment(item.lastMessageTime).fromNow()}
+                                        </h2>
+                                    </div>
+                                </div>
                                 <h2 className={`text-sm ${item.isUnread ? "font-bold" : ""}`}>
                                     <span className="text-primary">{item.iAmLastSender ? "You: " : item.name.split(" ")[0] + ": "}</span>
                                     <span className="text-primary">{item.lastMessage}</span>
