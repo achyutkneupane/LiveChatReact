@@ -1,5 +1,9 @@
 import {AiFillSetting} from "react-icons/ai";
 import moment from "moment";
+import {useEffect, useState} from "react";
+import {fetchChatBoxes} from "@chatUtils/fetchers/chatFetcher.ts";
+import {ChatBoxResponse} from "@chatTypes/response.ts";
+import CenterSpinner from "@chatComponents/Utils/CenterSpinner.tsx";
 
 interface ChatBoxItemProps {
     name: string;
@@ -10,81 +14,23 @@ interface ChatBoxItemProps {
 }
 
 const Sidebar = () => {
-    const items : ChatBoxItemProps[] = [
-        {
-            name: "Alice Doe",
-            lastMessage: "This is me Alice",
-            lastMessageTime: "2021-10-10 12:00:00",
-            iAmLastSender: true,
-            isUnread: false,
-        }, {
-            name: "Bob Doe",
-            lastMessage: "Hello Achyut",
-            lastMessageTime: "2022-10-10 12:00:00",
-            iAmLastSender: false,
-            isUnread: false,
-        }, {
-            name: "Charlie Doe",
-            lastMessage: "Hello Achyut, I am Charlie",
-            lastMessageTime: "2023-01-23 02:54:19",
-            iAmLastSender: false,
-            isUnread: true,
-        }, {
-            name: "David Doe",
-            lastMessage: "Hello Achyut, I am David",
-            lastMessageTime: "2023-01-23 02:54:19",
-            iAmLastSender: true,
-            isUnread: false,
-        }, {
-            name: "Alice Doe",
-            lastMessage: "This is me Alice",
-            lastMessageTime: "2021-10-10 12:00:00",
-            iAmLastSender: true,
-            isUnread: true,
-        }, {
-            name: "Bob Doe",
-            lastMessage: "Hello Achyut",
-            lastMessageTime: "2022-10-10 12:00:00",
-            iAmLastSender: false,
-            isUnread: false,
-        }, {
-            name: "Charlie Doe",
-            lastMessage: "Hello Achyut, I am Charlie",
-            lastMessageTime: "2023-01-23 02:54:19",
-            iAmLastSender: false,
-            isUnread: true,
-        }, {
-            name: "David Doe",
-            lastMessage: "Hello Achyut, I am David",
-            lastMessageTime: "2023-01-23 02:54:19",
-            iAmLastSender: true,
-            isUnread: false,
-        }, {
-            name: "Alice Doe",
-            lastMessage: "This is me Alice",
-            lastMessageTime: "2021-10-10 12:00:00",
-            iAmLastSender: true,
-            isUnread: false,
-        }, {
-            name: "Bob Doe",
-            lastMessage: "Hello Achyut",
-            lastMessageTime: "2022-10-10 12:00:00",
-            iAmLastSender: false,
-            isUnread: false,
-        }, {
-            name: "Charlie Doe",
-            lastMessage: "Hello Achyut, I am Charlie",
-            lastMessageTime: "2023-01-23 02:54:19",
-            iAmLastSender: false,
-            isUnread: true,
-        }, {
-            name: "David Doe",
-            lastMessage: "Hello Achyut, I am David",
-            lastMessageTime: "2023-01-23 02:54:19",
-            iAmLastSender: true,
-            isUnread: false,
-        }
-    ];
+    // const items : ChatBoxItemProps[] = [];
+    const [items, setItems] = useState<ChatBoxItemProps[]>([]);
+    useEffect(() => {
+        fetchChatBoxes().then((res) => {
+            const chats = res.chatBoxes.map((chat: ChatBoxResponse) => {
+                return {
+                    name: chat.name,
+                    lastMessage: chat.lastMessage,
+                    lastMessageTime: chat.lastMessageTime,
+                    iAmLastSender: chat.iAmLastSender,
+                    isUnread: chat.isUnread
+                };
+            });
+            console.log(chats);
+            setItems(chats);
+        });
+    }, []);
     return (
         <>
             <div className="bg-white border-r-2 border-primary border-opacity-50 w-96 h-screen p-3 overflow-y-auto">
@@ -99,17 +45,21 @@ const Sidebar = () => {
                         </div>
                     </div>
                     <div className="flex flex-row justify-end items-center">
-                        <AiFillSetting />
+                        <AiFillSetting/>
                     </div>
                 </div>
-                <hr className="mt-3" />
+                <hr className="mt-3"/>
                 <div className="mt-3">
-                    <input type="text" className="w-full h-10 rounded-full border-2 border-primary border-opacity-50 p-2" placeholder="Search" />
+                    <input type="text"
+                           className="w-full h-10 rounded-full border-2 border-primary border-opacity-50 p-2"
+                           placeholder="Search"/>
                 </div>
                 <div className="mt-3 flex flex-col gap-2">
-                    {items.map((item, index) => (
-                        <div key={index} className="flex flex-row justify-start items-center border border-primary border-opacity-40 p-4 rounded-2xl">
-                            <div className="w-10 h-10 bg-primary rounded-full relative flex justify-center items-center text-center">
+                    {items.length > 0 ? items.map((item, index) => (
+                        <div key={index}
+                             className="flex flex-row justify-start items-center border border-primary border-opacity-40 p-4 rounded-2xl">
+                            <div
+                                className="w-10 h-10 bg-primary rounded-full relative flex justify-center items-center text-center">
                                 {item.isUnread && (
                                     <div className="w-3 h-3 bg-red-500 rounded-full absolute top-0 right-0"></div>
                                 )}
@@ -122,17 +72,26 @@ const Sidebar = () => {
                                     </div>
                                     <div>
                                         <h2 className={`text-sm text-gray-400`}>
-                                            {moment(item.lastMessageTime).fromNow()}
+                                            {item.lastMessageTime ? moment(item.lastMessageTime).fromNow() : ""}
                                         </h2>
                                     </div>
                                 </div>
-                                <h2 className={`text-sm ${item.isUnread ? "font-bold" : ""}`}>
-                                    <span className="text-primary">{item.iAmLastSender ? "You: " : item.name.split(" ")[0] + ": "}</span>
-                                    <span className="text-primary">{item.lastMessage}</span>
-                                </h2>
+                                {item.lastMessage ? (
+                                    <h2 className={`text-sm ${item.isUnread ? "font-bold" : ""}`}>
+                                        <span
+                                            className="text-primary">{item.iAmLastSender ? "You: " : item.name.split(" ")[0] + ": "}</span>
+                                        <span className="text-primary">{item.lastMessage}</span>
+                                    </h2>
+                                ) : (
+                                    <h2 className={`text-sm ${item.isUnread ? "font-bold" : ""}`}>
+                                        <span className="text-gray-400">No messages yet...</span>
+                                    </h2>
+                                )}
                             </div>
                         </div>
-                    ))}
+                    )) : (
+                        <CenterSpinner/>
+                    )}
                 </div>
             </div>
         </>
