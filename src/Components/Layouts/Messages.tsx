@@ -1,5 +1,6 @@
 import moment from "moment";
 import {useEffect, useRef, useState} from "react";
+import CenterSpinner from "@chatComponents/Utils/CenterSpinner.tsx";
 
 interface MessageProps {
     message: string;
@@ -7,75 +8,13 @@ interface MessageProps {
     isMe: boolean;
 }
 
-const staticMsgs: MessageProps[] = [
-    {
-        message: "Hello Alice",
-        time: "2021-10-10 12:01:00",
-        isMe: false,
-    }, {
-        message: "Hello Bob",
-        time: "2021-10-10 12:02:12",
-        isMe: true,
-    }, {
-        message: "How are you?",
-        time: "2021-10-10 12:02:48",
-        isMe: true,
-    }, {
-        message: "I am fine",
-        time: "2021-10-10 12:03:14",
-        isMe: false,
-    }, {
-        message: "How are you?",
-        time: "2021-10-10 12:03:51",
-        isMe: false,
-    }, {
-        message: "I am fine",
-        time: "2021-10-10 12:05:16",
-        isMe: true,
-    }, {
-        message: "By the way, I am Charlie",
-        time: "2021-10-10 12:08:23",
-        isMe: false,
-    }, {
-        message: "Ohh! Ok. Nice to talk to you",
-        time: "2021-10-10 12:09:12",
-        isMe: true,
-    }, {
-        message: "Bob told me about you",
-        time: "2021-10-10 12:09:45",
-        isMe: true,
-    }, {
-        message: "Oh really? What did he say?",
-        time: "2021-10-10 12:10:12",
-        isMe: false,
-    }, {
-        message: "He said you are a good person",
-        time: "2021-10-10 12:10:45",
-        isMe: true,
-    }, {
-        message: "Ohh! Thank you",
-        time: "2021-10-10 12:11:12",
-        isMe: false,
-    }, {
-        message: "You are welcome",
-        time: "2021-10-10 12:11:45",
-        isMe: true,
-    }, {
-        message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium adipisci alias aliquam asperiores atque autem, beatae blanditiis consequatur cumque cupiditate deserunt doloremque doloribus earum eos error esse eum eveniet excepturi explicabo facere fugiat fugit hic illo illum in incidunt ipsum iure iusto laborum libero magnam magni maiores maxime minus molestiae nam natus nesciunt nihil nisi nobis nostrum numquam odio officiis omnis pariatur perferendis perspiciatis placeat praesentium provident quae quas quasi quia quibusdam quisquam quod quos ratione recusandae rem repellat reprehenderit rerum saepe sapiente sequi similique sint soluta sunt suscipit tempora tenetur totam ullam ut vel veniam veritatis voluptas voluptate voluptates voluptatum. Accusantium adipisci alias aliquam asperiores atque autem, beatae blanditiis consequatur cumque cupiditate deserunt doloremque doloribus earum eos error esse eum eveniet excepturi explicabo facere fugiat fugit hic illo illum in incidunt ipsum iure iusto laborum libero magnam magni maiores maxime minus molestiae nam natus nesciunt nihil nisi nobis nostrum numquam odio officiis omnis pariatur perferendis perspiciatis placeat praesentium provident quae quas quasi quia quibusdam quisquam quod quos ratione recusandae rem repellat reprehenderit rerum saepe sapiente sequi similique sint soluta sunt suscipit tempora tenetur totam ullam ut vel veniam veritatis voluptas voluptate voluptates voluptatum.",
-        time: "2023-10-23 12:11:45",
-        isMe: false
-    }, {
-        message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium adipisci alias aliquam asperiores atque autem, beatae blanditiis consequatur cumque cupiditate deserunt doloremque doloribus earum eos error esse eum eveniet excepturi explicabo facere fugiat fugit hic illo illum in incidunt ipsum iure iusto laborum libero magnam magni maiores maxime minus molestiae nam natus nesciunt nihil nisi nobis nostrum numquam odio officiis omnis pariatur perferendis perspiciatis placeat praesentium provident quae quas quasi quia quibusdam quisquam quod quos ratione recusandae rem repellat reprehenderit rerum saepe sapiente sequi similique sint soluta sunt suscipit tempora tenetur totam ullam ut vel veniam veritatis voluptas voluptate voluptates voluptatum. Accusantium adipisci alias aliquam asperiores atque autem, beatae blanditiis consequatur cumque cupiditate deserunt doloremque doloribus earum eos error esse eum eveniet excepturi explicabo facere fugiat fugit hic illo illum in incidunt ipsum iure iusto laborum libero magnam magni maiores maxime minus molestiae nam natus nesciunt nihil nisi nobis nostrum numquam odio officiis omnis pariatur perferendis perspiciatis placeat praesentium provident quae quas quasi quia quibusdam quisquam quod quos ratione recusandae rem repellat reprehenderit rerum saepe sapiente sequi similique sint soluta sunt suscipit tempora tenetur totam ullam ut vel veniam veritatis voluptas voluptate voluptates voluptatum.",
-        time: "2023-10-23 12:11:51",
-        isMe: true
-    }
-];
-
+const staticMsgs: MessageProps[] = [];
 const Messages = () => {
 
     const [messages, setMessages] = useState<MessageProps[]>([]);
     const [message, setMessage] = useState<string>("");
 
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const messagesArea = useRef(null);
 
@@ -87,7 +26,9 @@ const Messages = () => {
     };
 
     useEffect(() => {
+        setIsLoading(true);
         setMessages(staticMsgs);
+        setIsLoading(false);
     }, []);
 
     useEffect(() => {
@@ -113,25 +54,33 @@ const Messages = () => {
     return (
         <>
             <div className="overflow-y-auto scroll-smooth" style={style} ref={messagesArea}>
-                <div className="flex flex-col-reverse gap-2 p-4">
+                <div className="flex flex-col-reverse gap-2 p-4 h-full">
                     {
-                        messages.sort((a, b) => {
-                            return new Date(b.time).getTime() - new Date(a.time).getTime();
-                        }).map((message, index) => {
-                            return (
-                                <div key={index}
-                                     className={`flex flex-col gap-1 ${message.isMe ? "items-end" : "items-start"}`}>
-                                    <div
-                                        className={`flex flex-col gap-1 border border-primary rounded-xl px-3 py-2 max-w-xl ${message.isMe ? "items-end text-primary bg-gray-50" : "items-start bg-primary text-white"}`}>
-                                        <p className={`text-sm text-justify ${message.isMe ? "text-right" : "text-left"}`}>{message.message}</p>
-                                        <p className={`text-xs ${message.isMe ? "text-right text-gray-500" : "text-left text-gray-300"}`}>
-                                            {/*difference in time*/}
-                                            {moment(message.time).fromNow()}
-                                        </p>
+                        isLoading ? <CenterSpinner/> : (
+                            <>
+                                {messages.length > 0 ? messages.sort((a, b) => {
+                                    return new Date(b.time).getTime() - new Date(a.time).getTime();
+                                }).map((message, index) => {
+                                    return (
+                                        <div key={index}
+                                             className={`flex flex-col gap-1 ${message.isMe ? "items-end" : "items-start"}`}>
+                                            <div
+                                                className={`flex flex-col gap-1 border border-primary rounded-xl px-3 py-2 max-w-xl ${message.isMe ? "items-end text-primary bg-gray-50" : "items-start bg-primary text-white"}`}>
+                                                <p className={`text-sm text-justify ${message.isMe ? "text-right" : "text-left"}`}>{message.message}</p>
+                                                <p className={`text-xs ${message.isMe ? "text-right text-gray-500" : "text-left text-gray-300"}`}>
+                                                    {/*difference in time*/}
+                                                    {moment(message.time).fromNow()}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )
+                                }) : (
+                                    <div className="flex flex-col justify-center items-center">
+                                        <h1 className="text-gray-400">No messages yet...</h1>
                                     </div>
-                                </div>
-                            )
-                        })
+                                )}
+                            </>
+                        )
                     }
                 </div>
                 <div className="absolute w-full bottom-0 border">
