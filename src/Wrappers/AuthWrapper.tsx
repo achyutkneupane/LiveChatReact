@@ -19,7 +19,7 @@ const AuthWrapper: FC<LayoutProps> = ({children}) => {
         <div className="relative">
             <Sidebar/>
             <Navbar/>
-            <div className="absolute top-16 left-96 right-0 p-2">
+            <div className="absolute top-16 left-96 right-0">
                 {children}
             </div>
         </div>
