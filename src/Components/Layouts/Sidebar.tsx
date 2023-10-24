@@ -4,8 +4,10 @@ import {useEffect, useState} from "react";
 import {fetchChatBoxes} from "@chatUtils/fetchers/chatFetcher.ts";
 import {ChatBoxResponse} from "@chatTypes/response.ts";
 import CenterSpinner from "@chatComponents/Utils/CenterSpinner.tsx";
+import {Link} from "react-router-dom";
 
 interface ChatBoxItemProps {
+    id: string;
     name: string;
     lastMessage: string;
     lastMessageTime: string;
@@ -20,6 +22,7 @@ const Sidebar = () => {
         fetchChatBoxes().then((res) => {
             const chats = res.chatBoxes.map((chat: ChatBoxResponse) => {
                 return {
+                    id: chat._id,
                     name: chat.name,
                     lastMessage: chat.lastMessage,
                     lastMessageTime: chat.lastMessageTime,
@@ -56,39 +59,41 @@ const Sidebar = () => {
                 </div>
                 <div className="mt-3 flex flex-col gap-2">
                     {items.length > 0 ? items.map((item, index) => (
-                        <div key={index}
-                             className="flex flex-row justify-start items-center border border-primary border-opacity-40 p-4 rounded-2xl">
-                            <div
-                                className="w-10 h-10 bg-primary rounded-full relative flex justify-center items-center text-center">
-                                {item.isUnread && (
-                                    <div className="w-3 h-3 bg-red-500 rounded-full absolute top-0 right-0"></div>
-                                )}
-                                <h1 className="text-xl text-white text-center">{item.name[0]}</h1>
-                            </div>
-                            <div className="ml-2 w-full h-full">
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <h1 className={`text-base ${item.isUnread ? "font-bold" : ""} text-primary`}>{item.name}</h1>
-                                    </div>
-                                    <div>
-                                        <h2 className={`text-sm text-gray-400`}>
-                                            {item.lastMessageTime ? moment(item.lastMessageTime).fromNow() : ""}
-                                        </h2>
-                                    </div>
+                        <Link to={`/${item.id}`}>
+                            <div key={index}
+                                 className="flex flex-row justify-start items-center border border-primary border-opacity-40 p-4 rounded-2xl">
+                                <div
+                                    className="w-10 h-10 bg-primary rounded-full relative flex justify-center items-center text-center">
+                                    {item.isUnread && (
+                                        <div className="w-3 h-3 bg-red-500 rounded-full absolute top-0 right-0"></div>
+                                    )}
+                                    <h1 className="text-xl text-white text-center">{item.name[0]}</h1>
                                 </div>
-                                {item.lastMessage ? (
-                                    <h2 className={`text-sm ${item.isUnread ? "font-bold" : ""}`}>
+                                <div className="ml-2 w-full h-full">
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <h1 className={`text-base ${item.isUnread ? "font-bold" : ""} text-primary`}>{item.name}</h1>
+                                        </div>
+                                        <div>
+                                            <h2 className={`text-sm text-gray-400`}>
+                                                {item.lastMessageTime ? moment(item.lastMessageTime).fromNow() : ""}
+                                            </h2>
+                                        </div>
+                                    </div>
+                                    {item.lastMessage ? (
+                                        <h2 className={`text-sm ${item.isUnread ? "font-bold" : ""}`}>
                                         <span
                                             className="text-primary">{item.iAmLastSender ? "You: " : item.name.split(" ")[0] + ": "}</span>
-                                        <span className="text-primary">{item.lastMessage}</span>
-                                    </h2>
-                                ) : (
-                                    <h2 className={`text-sm ${item.isUnread ? "font-bold" : ""}`}>
-                                        <span className="text-gray-400">No messages yet...</span>
-                                    </h2>
-                                )}
+                                            <span className="text-primary">{item.lastMessage}</span>
+                                        </h2>
+                                    ) : (
+                                        <h2 className={`text-sm ${item.isUnread ? "font-bold" : ""}`}>
+                                            <span className="text-gray-400">No messages yet...</span>
+                                        </h2>
+                                    )}
+                                </div>
                             </div>
-                        </div>
+                        </Link>
                     )) : (
                         <CenterSpinner/>
                     )}

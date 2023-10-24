@@ -6,7 +6,6 @@ import GuestWrapper from "@chatWrappers/GuestWrapper.tsx";
 import ChatSystem from "@chatSys/Pages/ChatSystem.tsx";
 import Login from "@chatSys/Pages/Auth/Login.tsx";
 import Register from "@chatPages/Auth/Register.tsx";
-import ChatSystem2 from "@chatPages/ChatSystem2.tsx";
 
 const ChatRoutes = () => {
     return (
@@ -18,8 +17,7 @@ const ChatRoutes = () => {
                     </AuthWrapper>
                 }
             >
-                <Route path="/" element={<ChatSystem />} />
-                <Route path="/two" element={<ChatSystem2 />} />
+                <Route path="/:id?" element={<ChatSystem />} />
             </Route>
 
             <Route
