@@ -1,14 +1,15 @@
 import moment from "moment";
 import {useEffect, useRef, useState} from "react";
 import CenterSpinner from "@chatComponents/Utils/CenterSpinner.tsx";
+import {fetchMessages} from "@chatUtils/fetchers/chatFetcher.ts";
+import {MessageResponse} from "@chatTypes/response.ts";
 
 interface MessageProps {
+    id: string;
     message: string;
     time: string;
     isMe: boolean;
 }
-
-const staticMsgs: MessageProps[] = [];
 const Messages = (props: {
     chatId?: string;
 }) => {
@@ -29,9 +30,19 @@ const Messages = (props: {
 
     useEffect(() => {
         setIsLoading(true);
-        setMessages(staticMsgs);
-        setIsLoading(false);
-    }, []);
+        props.chatId ? fetchMessages(props.chatId!).then((res) => {
+            setIsLoading(false);
+            const messages = res.messages.map((message : MessageResponse) => {
+                return {
+                    id: message._id,
+                    message: message.content,
+                    time: message.createdAt,
+                    isMe: message.isMe,
+                };
+            });
+            setMessages(messages);
+        }) : setIsLoading(false);
+    }, [props.chatId]);
 
     useEffect(() => {
         const messagesAreaElement = messagesArea.current as unknown as HTMLElement;
@@ -44,6 +55,7 @@ const Messages = (props: {
         }
 
         const newMessage: MessageProps = {
+            id: "1",
             message: message,
             time: new Date().toISOString(),
             isMe: true,
@@ -68,7 +80,9 @@ const Messages = (props: {
                                             }).map((message, index) => {
                                                 return (
                                                     <div key={index}
-                                                         className={`flex flex-col gap-1 ${message.isMe ? "items-end" : "items-start"}`}>
+                                                         className={`flex flex-col gap-1 ${message.isMe ? "items-end" : "items-start"}`}
+                                                         id={message.id}
+                                                    >
                                                         <div
                                                             className={`flex flex-col gap-1 border border-primary rounded-xl px-3 py-2 max-w-xl ${message.isMe ? "items-end text-primary bg-gray-50" : "items-start bg-primary text-white"}`}>
                                                             <p className={`text-sm text-justify ${message.isMe ? "text-right" : "text-left"}`}>{message.message}</p>

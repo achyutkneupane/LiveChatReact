@@ -58,7 +58,9 @@ const Sidebar = () => {
                            placeholder="Search"/>
                 </div>
                 <div className="mt-3 flex flex-col gap-2">
-                    {items.length > 0 ? items.map((item, index) => (
+                    {items.length > 0 ? items.sort((a, b) => {
+                        return new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime();
+                    }).map((item, index) => (
                         <Link to={`/${item.id}`}>
                             <div key={index}
                                  className="flex flex-row justify-start items-center border border-primary border-opacity-40 p-4 rounded-2xl">
