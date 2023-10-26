@@ -1,7 +1,7 @@
 import moment from "moment";
 import {useEffect, useRef, useState} from "react";
 import CenterSpinner from "@chatComponents/Utils/CenterSpinner.tsx";
-import {fetchMessages} from "@chatUtils/fetchers/chatFetcher.ts";
+import {fetchMessages, sendMessage as messageSender} from "@chatUtils/fetchers/chatFetcher.ts";
 import {MessageResponse} from "@chatTypes/response.ts";
 
 interface MessageProps {
@@ -28,20 +28,22 @@ const Messages = (props: {
         paddingBottom: `${sendMessageAreaHeight! + 20}px`,
     };
 
+    const callMessageFetcher = () => props.chatId ? fetchMessages(props.chatId!).then((res) => {
+        setIsLoading(false);
+        const messages = res.messages.map((message : MessageResponse) => {
+            return {
+                id: message._id,
+                message: message.content,
+                time: message.createdAt,
+                isMe: message.isMe,
+            };
+        });
+        setMessages(messages);
+    }) : setIsLoading(false);
+
     useEffect(() => {
         setIsLoading(true);
-        props.chatId ? fetchMessages(props.chatId!).then((res) => {
-            setIsLoading(false);
-            const messages = res.messages.map((message : MessageResponse) => {
-                return {
-                    id: message._id,
-                    message: message.content,
-                    time: message.createdAt,
-                    isMe: message.isMe,
-                };
-            });
-            setMessages(messages);
-        }) : setIsLoading(false);
+        callMessageFetcher();
     }, [props.chatId]);
 
     useEffect(() => {
@@ -54,14 +56,10 @@ const Messages = (props: {
             return;
         }
 
-        const newMessage: MessageProps = {
-            id: "1",
-            message: message,
-            time: new Date().toISOString(),
-            isMe: true,
-        };
+        messageSender(props.chatId!, message).then(() => {
+            callMessageFetcher();
+        });
 
-        setMessages([...messages, newMessage]);
         setMessage("");
     }
 
