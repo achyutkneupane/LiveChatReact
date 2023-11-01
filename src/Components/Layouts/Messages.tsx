@@ -7,8 +7,9 @@ import {MessageResponse} from "@chatTypes/response.ts";
 interface MessageProps {
     id: string;
     message: string;
-    time: string;
+    time: string|Date;
     isMe: boolean;
+    sender: string;
 }
 const Messages = (props: {
     chatId?: string;
@@ -28,14 +29,17 @@ const Messages = (props: {
         paddingBottom: `${sendMessageAreaHeight! + 20}px`,
     };
 
-    const callMessageFetcher = () => props.chatId ? fetchMessages(props.chatId!).then((res) => {
+    const callMessageFetcher = () => props.chatId ? fetchMessages(props.chatId!).then((res : {
+        messages: MessageResponse[];
+    }) => {
         setIsLoading(false);
-        const messages = res.messages.map((message : MessageResponse) => {
+        const messages : MessageProps[] = res.messages.map((message : MessageResponse) => {
             return {
                 id: message._id,
                 message: message.content,
                 time: message.createdAt,
                 isMe: message.isMe,
+                sender: message.senderName
             };
         });
         setMessages(messages);
@@ -75,17 +79,19 @@ const Messages = (props: {
                                         <>
                                             {messages.length > 0 ? messages.sort((a, b) => {
                                                 return new Date(b.time).getTime() - new Date(a.time).getTime();
-                                            }).map((message, index) => {
+                                            }).map((message : MessageProps, index) => {
                                                 return (
                                                     <div key={index}
                                                          className={`flex flex-col gap-1 ${message.isMe ? "items-end" : "items-start"}`}
                                                          id={message.id}
                                                     >
+                                                        <span className="text-gray-500 text-xs">
+                                                            {message.sender}
+                                                        </span>
                                                         <div
                                                             className={`flex flex-col gap-1 border border-primary rounded-xl px-3 py-2 max-w-xl ${message.isMe ? "items-end text-primary bg-gray-50" : "items-start bg-primary text-white"}`}>
                                                             <p className={`text-sm text-justify ${message.isMe ? "text-right" : "text-left"}`}>{message.message}</p>
                                                             <p className={`text-xs ${message.isMe ? "text-right text-gray-500" : "text-left text-gray-300"}`}>
-                                                                {/*difference in time*/}
                                                                 {moment(message.time).fromNow()}
                                                             </p>
                                                         </div>

@@ -20,17 +20,17 @@ const Sidebar = () => {
     const [items, setItems] = useState<ChatBoxItemProps[]>([]);
     useEffect(() => {
         fetchChatBoxes().then((res) => {
+            console.log(res);
             const chats = res.chatBoxes.map((chat: ChatBoxResponse) => {
                 return {
                     id: chat._id,
-                    name: chat.name,
+                    name: chat.name ?? "Unknown User",
                     lastMessage: chat.lastMessage,
                     lastMessageTime: chat.lastMessageTime,
                     iAmLastSender: chat.iAmLastSender,
                     isUnread: chat.isUnread
                 };
             });
-            console.log(chats);
             setItems(chats);
         });
     }, []);
