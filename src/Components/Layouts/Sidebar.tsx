@@ -2,9 +2,11 @@ import {AiFillSetting} from "react-icons/ai";
 import moment from "moment";
 import {useEffect, useState} from "react";
 import {fetchChatBoxes} from "@chatUtils/fetchers/chatFetcher.ts";
-import {ChatBoxResponse} from "@chatTypes/response.ts";
+import {ChatBoxResponse, UserResponse} from "@chatTypes/response.ts";
 import CenterSpinner from "@chatComponents/Utils/CenterSpinner.tsx";
 import {Link} from "react-router-dom";
+import {useAuth} from "@chatHooks/useAuth.ts";
+import {fullName} from "@chatUtils/helpers.ts";
 
 interface ChatBoxItemProps {
     id: string;
@@ -16,7 +18,7 @@ interface ChatBoxItemProps {
 }
 
 const Sidebar = () => {
-
+    const user : UserResponse = useAuth()!;
     const [items, setItems] = useState<ChatBoxItemProps[]>([]);
     useEffect(() => {
         fetchChatBoxes().then((res) => {
@@ -39,9 +41,13 @@ const Sidebar = () => {
             <div className="bg-white border-r-2 border-primary border-opacity-50 w-96 h-screen p-3 overflow-y-auto">
                 <div className="flex flex-row justify-between items-center">
                     <div className="flex flex-row justify-start items-center">
-                        <div className="w-20 h-20 bg-primary rounded-full"></div>
+                        <div className="w-20 h-20 bg-primary rounded-full flex justify-center items-center">
+                            <h1 className="text-5xl text-white text-center">{user.firstName[0]}</h1>
+                        </div>
                         <div className="ml-2">
-                            <h1 className="text-xl font-bold text-primary">Username</h1>
+                            <h1 className="text-xl font-bold text-primary">
+                                {fullName(user.firstName, user.middleName, user.lastName)}
+                            </h1>
                             <h2 className="text-sm">
                                 <span className="text-primary">Online</span>
                             </h2>
