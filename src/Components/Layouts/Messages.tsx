@@ -113,7 +113,7 @@ const Messages = (props: {
                         )
                     }
                 </div>
-                <div className="absolute w-full bottom-0 border">
+                {props.chatId && <div className="absolute w-full bottom-0 border">
                     <div className="flex items-center justify-between h-16 border-t border-gray-200 bg-white gap-2 px-4"
                          id="sendMessageArea">
                         <div className="flex items-center justify-between w-full">
@@ -137,7 +137,7 @@ const Messages = (props: {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>}
             </div>
         </>
     );
