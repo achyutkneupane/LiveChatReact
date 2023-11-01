@@ -1,22 +1,10 @@
-import {useEffect, useState} from "react";
+import {createContext, useContext} from "react";
 
-export const usePageTitle = () => {
-    const [pageTitle, setPageTitle] = useState<string | null>(null);
-    const [activeChatBox, setActiveChatBox] = useState<string | null>(null);
-
-    useEffect(() => {
-        setPageTitle(activeChatBox);
-        console.log(activeChatBox);
-    }, [activeChatBox]);
-
-    useEffect(() => {
-        document.title = pageTitle ? pageTitle : "Live Chat";
-    }, [pageTitle]);
-
-    return {
-        pageTitle,
-        setPageTitle,
-        activeChatBox,
-        setActiveChatBox
-    };
+interface PageTitleContext {
+    pageTitle: string | null;
+    setPageTitle: (title: string | null) => void;
+    activeChatBox: string | null;
+    setActiveChatBox: (title: string | null) => void;
 }
+export const PageTitleContext = createContext<PageTitleContext|null>(null);
+export const usePageTitle = () => useContext(PageTitleContext)!;

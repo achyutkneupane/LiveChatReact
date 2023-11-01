@@ -6,11 +6,11 @@ import {usePageTitle} from "@chatHooks/usePageTitle.tsx";
 const ChatSystem = () => {
     const params = useParams();
     const loc = useLocation();
-    const { setActiveChatBox } = usePageTitle();
+    const {setActiveChatBox} = usePageTitle();
 
 
     useEffect(() => {
-        setActiveChatBox(loc.state ? loc.state.title : "Live Chat");
+        setActiveChatBox(loc.state ? loc.state.title : "");
     }, [loc.state]);
 
     return (
