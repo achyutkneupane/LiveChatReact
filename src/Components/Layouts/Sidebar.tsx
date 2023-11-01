@@ -16,7 +16,7 @@ interface ChatBoxItemProps {
 }
 
 const Sidebar = () => {
-    // const items : ChatBoxItemProps[] = [];
+
     const [items, setItems] = useState<ChatBoxItemProps[]>([]);
     useEffect(() => {
         fetchChatBoxes().then((res) => {
