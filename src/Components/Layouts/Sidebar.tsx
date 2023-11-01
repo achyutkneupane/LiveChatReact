@@ -1,4 +1,4 @@
-import {AiFillSetting} from "react-icons/ai";
+import {AiFillSetting, AiOutlineLogout} from "react-icons/ai";
 import moment from "moment";
 import {useEffect, useState} from "react";
 import {fetchChatBoxes} from "@chatUtils/fetchers/chatFetcher.ts";
@@ -6,7 +6,9 @@ import {ChatBoxResponse, UserResponse} from "@chatTypes/response.ts";
 import CenterSpinner from "@chatComponents/Utils/CenterSpinner.tsx";
 import {Link} from "react-router-dom";
 import {useAuth} from "@chatHooks/useAuth.ts";
-import {fullName} from "@chatUtils/helpers.ts";
+import {fullName, logout} from "@chatUtils/helpers.ts";
+import {RiLogoutBoxFill} from "react-icons/ri";
+import {HiOutlineLogout} from "react-icons/hi";
 
 interface ChatBoxItemProps {
     id: string;
@@ -53,8 +55,8 @@ const Sidebar = () => {
                             </h2>
                         </div>
                     </div>
-                    <div className="flex flex-row justify-end items-center">
-                        <AiFillSetting/>
+                    <div className="flex flex-row justify-end items-center cursor-pointer" onClick={logout}>
+                       <HiOutlineLogout className="p-1.5 w-10 h-10 border-2 rounded-full border-primary stroke-primary hover:stroke-white hover:bg-primary hover:bg-opacity-90 "/>
                     </div>
                 </div>
                 <hr className="mt-3"/>
