@@ -3,6 +3,7 @@ import {useEffect, useRef, useState} from "react";
 import CenterSpinner from "@chatComponents/Utils/CenterSpinner.tsx";
 import {fetchMessages, sendMessage as messageSender} from "@chatUtils/fetchers/chatFetcher.ts";
 import {MessageResponse} from "@chatTypes/response.ts";
+import {AiOutlineSend} from "react-icons/ai";
 
 interface MessageProps {
     id: string;
@@ -133,7 +134,7 @@ const Messages = (props: {
                             <button
                                 className="w-10 h-10 bg-primary rounded-full flex justify-center items-center text-xs text-white"
                                 onClick={() => sendMessage()}>
-                                Send
+                                <AiOutlineSend className="stroke-2 fill-white"/>
                             </button>
                         </div>
                     </div>

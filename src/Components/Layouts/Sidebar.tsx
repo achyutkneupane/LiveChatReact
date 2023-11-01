@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 import {useAuth} from "@chatHooks/useAuth.ts";
 import {fullName, logout} from "@chatUtils/helpers.ts";
 import {HiOutlineLogout} from "react-icons/hi";
+import {FiEdit} from "react-icons/fi";
 
 interface ChatBoxItemProps {
     id: string;
@@ -39,7 +40,7 @@ const Sidebar = () => {
     }, []);
     return (
         <>
-            <div className="bg-white border-r-2 border-primary border-opacity-50 w-96 h-screen p-3 overflow-y-auto">
+            <div className="bg-white border-r-2 border-primary border-opacity-50 w-96 h-screen p-3 overflow-y-auto relative">
                 <div className="flex flex-row justify-between items-center">
                     <div className="flex flex-row justify-start items-center">
                         <div className="w-20 h-20 bg-primary rounded-full flex justify-center items-center">
@@ -116,6 +117,12 @@ const Sidebar = () => {
                             }
                         </>
                     )}
+                </div>
+                <div className="absolute bottom-5 right-5">
+                    <button
+                        className="w-16 h-16 bg-primary bg-opacity-90 rounded-full flex justify-center items-center text-white text-3xl border-4 border-white">
+                        <FiEdit className="stroke-white p-2" />
+                    </button>
                 </div>
             </div>
         </>
