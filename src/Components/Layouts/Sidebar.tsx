@@ -1,4 +1,3 @@
-import {AiFillSetting, AiOutlineLogout} from "react-icons/ai";
 import moment from "moment";
 import {useEffect, useState} from "react";
 import {fetchChatBoxes} from "@chatUtils/fetchers/chatFetcher.ts";
@@ -7,7 +6,6 @@ import CenterSpinner from "@chatComponents/Utils/CenterSpinner.tsx";
 import {Link} from "react-router-dom";
 import {useAuth} from "@chatHooks/useAuth.ts";
 import {fullName, logout} from "@chatUtils/helpers.ts";
-import {RiLogoutBoxFill} from "react-icons/ri";
 import {HiOutlineLogout} from "react-icons/hi";
 
 interface ChatBoxItemProps {
@@ -24,7 +22,6 @@ const Sidebar = () => {
     const [items, setItems] = useState<ChatBoxItemProps[]>([]);
     useEffect(() => {
         fetchChatBoxes().then((res) => {
-            console.log(res);
             const chats = res.chatBoxes.map((chat: ChatBoxResponse) => {
                 return {
                     id: chat._id,
@@ -69,7 +66,7 @@ const Sidebar = () => {
                     {items.length > 0 ? items.sort((a, b) => {
                         return new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime();
                     }).map((item, index) => (
-                        <Link to={`/${item.id}`}>
+                        <Link to={`/${item.id}`} state={{title: item.name}} key={index}>
                             <div key={index}
                                  className="flex flex-row justify-start items-center border border-primary border-opacity-40 p-4 rounded-2xl">
                                 <div

@@ -1,18 +1,17 @@
 import {useEffect, useState} from "react";
-import {APP_NAME} from "@chatSys/env";
 
 export const usePageTitle = () => {
-    const [pageTitle, setPageTitle] = useState<string|null>(null);
-    const [activeChatBox, setActiveChatBox] = useState<string|null>(null);
-    useEffect(() => {
-        document.title = pageTitle! || APP_NAME;
-    }, [pageTitle]);
+    const [pageTitle, setPageTitle] = useState<string | null>(null);
+    const [activeChatBox, setActiveChatBox] = useState<string | null>(null);
 
     useEffect(() => {
-        if(activeChatBox) {
-            setPageTitle(activeChatBox);
-        }
+        setPageTitle(activeChatBox);
+        console.log(activeChatBox);
     }, [activeChatBox]);
+
+    useEffect(() => {
+        document.title = pageTitle ? pageTitle : "Live Chat";
+    }, [pageTitle]);
 
     return {
         pageTitle,
