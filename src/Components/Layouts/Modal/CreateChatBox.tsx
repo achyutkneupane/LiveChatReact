@@ -19,8 +19,9 @@ const CreateChatBox = () => {
     const closeModal = () => setShowModal(false);
 
     useEffect(() => {
-        showModal ? getOtherUsers().then((res) => {
-            console.log(res);
+        showModal ? getOtherUsers().then((res : {
+            users: UserResponse[];
+        }) => {
             setUsers(res.users);
         }) : setActiveId("");
     }, [showModal]);
@@ -34,7 +35,7 @@ const CreateChatBox = () => {
             closeModal();
             nav(`/${res.chatBox._id}`, {
                 state: {
-                    chatBox: "Test"
+                    title: res.chatBox.name
                 }
             });
         });
