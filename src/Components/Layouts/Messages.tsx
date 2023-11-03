@@ -51,7 +51,12 @@ const Messages = (props: {
 
     useEffect(() => {
         setIsLoading(true);
-        callMessageFetcher();
+
+        const interval = setInterval(() => {
+            callMessageFetcher();
+        }, 1500);
+
+        return () => clearInterval(interval);
     }, [props.chatId]);
 
     useEffect(() => {
