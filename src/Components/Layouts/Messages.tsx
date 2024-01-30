@@ -32,22 +32,29 @@ const Messages = (props: {
         paddingBottom: `${sendMessageAreaHeight! + 20}px`,
     };
 
-    const callMessageFetcher = () => props.chatId ? fetchMessages(props.chatId!).then((res : {
-        messages: MessageResponse[];
-    }) => {
-        setIsLoading(false);
-        setRefetchSidebar(true);
-        const messages : MessageProps[] = res.messages.map((message : MessageResponse) => {
-            return {
-                id: message._id,
-                message: message.content,
-                time: message.createdAt,
-                isMe: message.isMe,
-                sender: message.senderName
-            };
-        });
-        setMessages(messages);
-    }) : setIsLoading(false);
+    const callMessageFetcher = () => {
+        if(props.chatId) {
+            fetchMessages(props.chatId!).then((res : {
+                messages: MessageResponse[];
+            }) => {
+                setIsLoading(false);
+                setRefetchSidebar(true);
+                const messages : MessageProps[] = res.messages.map((message : MessageResponse) => {
+                    return {
+                        id: message._id,
+                        message: message.content,
+                        time: message.createdAt,
+                        isMe: message.isMe,
+                        sender: message.senderName
+                    };
+                });
+                setMessages(messages);
+            })
+        } else {
+            setIsLoading(false);
+            setRefetchSidebar(true);
+        }
+    };
 
     useEffect(() => {
         setIsLoading(true);
