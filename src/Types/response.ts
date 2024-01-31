@@ -1,10 +1,9 @@
 export interface ChatBoxResponse {
-    _id: string;
+    id: number;
     participants: string[];
     name: string;
     createdAt: Date;
     updatedAt: Date;
-    __v: number;
     lastMessage: null | string;
     lastMessageTime: Date | null;
     iAmLastSender: boolean | null;
@@ -12,7 +11,7 @@ export interface ChatBoxResponse {
 }
 
 export interface MessageResponse {
-    _id: string;
+    id: number;
     sender: Partial<UserResponse>;
     senderName: string;
     content: string;
@@ -21,12 +20,11 @@ export interface MessageResponse {
     isForwarded: boolean;
     createdAt: Date;
     updatedAt: Date;
-    __v: number;
     isMe: boolean;
 }
 
 export interface UserResponse {
-    _id: string;
+    id: number;
     firstName: string;
     middleName: string;
     lastName: string;
@@ -34,6 +32,4 @@ export interface UserResponse {
     username: string;
     createdAt: Date;
     updatedAt: Date;
-    __v: number;
-    id: string;
 }

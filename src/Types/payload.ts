@@ -1,5 +1,5 @@
 export interface LoginPayload {
-    username: string;
+    login: string;
     password: string;
 }
 

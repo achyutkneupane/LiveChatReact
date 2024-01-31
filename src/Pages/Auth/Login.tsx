@@ -16,12 +16,12 @@ const Login = () => {
     const [defaultValues, setDefaultValues] = useState<LoginPayload|null>(null);
 
     useEffect(() => {
-        setDefaultValues({username: "", password: ""});
+        setDefaultValues({login: "", password: ""});
     }, []);
 
     const handleLogin = (data : LoginPayload) => {
         loginUser(data).then((res) => {
-            localStorage.setItem(LOGIN_TOKEN, res.token);
+            localStorage.setItem(LOGIN_TOKEN, res.data.access);
             nav("/");
         });
     };
@@ -32,7 +32,7 @@ const Login = () => {
                     <HookForm onSubmit={(data : LoginPayload) => handleLogin(data)}>
                         <div className="bg-white p-8 rounded-2xl flex flex-col gap-2">
                             <HOne className="text-center">Login</HOne>
-                            <InputText name="username" label="Username" type="text" required/>
+                            <InputText name="login" label="Email/Username" type="text" required/>
                             <InputPassword name="password" label="Password" required/>
                             <Button type="submit">Login</Button>
                             <div className="text-center">

@@ -32,9 +32,9 @@ const Sidebar = () => {
 
     useEffect(() => {
         refetchSidebar && fetchChatBoxes().then((res) => {
-            const chats = res.chatBoxes.map((chat: ChatBoxResponse) => {
+            const chats = res.data.map((chat: ChatBoxResponse) => {
                 return {
-                    id: chat._id,
+                    id: chat.id,
                     name: chat.name ?? "Unknown User",
                     lastMessage: chat.lastMessage,
                     lastMessageTime: chat.lastMessageTime,

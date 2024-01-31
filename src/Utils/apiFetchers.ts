@@ -20,7 +20,17 @@ export const anFetch = (url: string, body?: any, method?: string, header?: any) 
                             toast.error(data.errors[errorIndex]);
                         });
                     } else {
-                        toast.error(data.message.charAt(0).toUpperCase() + data.message.slice(1));
+                        // toast.error(data.message.charAt(0).toUpperCase() + data.message.slice(1));
+                        const error_data: string[] = [];
+                        Object.keys(data).map((errorIndex) => {
+                            data[errorIndex].forEach((error: string) => {
+                                toast.error(error.charAt(0).toUpperCase() + error.slice(1));
+                            });
+                        });
+                        console.log(error_data);
+                        // error_data.forEach((key, value) => {
+                        //     toast.error(key.charAt(0).toUpperCase() + key.slice(1));
+                        // });
                     }
                 });
 

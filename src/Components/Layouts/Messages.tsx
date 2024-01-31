@@ -7,7 +7,7 @@ import {AiOutlineSend} from "react-icons/ai";
 import {useLayoutSetup} from "@chatHooks/useLayoutSetup.tsx";
 
 interface MessageProps {
-    id: string;
+    id: number;
     message: string;
     time: string|Date;
     isMe: boolean;
@@ -35,13 +35,15 @@ const Messages = (props: {
     const callMessageFetcher = () => {
         if(props.chatId) {
             fetchMessages(props.chatId!).then((res : {
-                messages: MessageResponse[];
+                data: {
+                    messages: MessageResponse[]
+                }
             }) => {
                 setIsLoading(false);
                 setRefetchSidebar(true);
-                const messages : MessageProps[] = res.messages.map((message : MessageResponse) => {
+                const messages : MessageProps[] = res.data.messages.map((message : MessageResponse) => {
                     return {
-                        id: message._id,
+                        id: message.id,
                         message: message.content,
                         time: message.createdAt,
                         isMe: message.isMe,
@@ -99,7 +101,7 @@ const Messages = (props: {
                                                 return (
                                                     <div key={index}
                                                          className={`flex flex-col gap-1 ${message.isMe ? "items-end" : "items-start"}`}
-                                                         id={message.id}
+                                                         id={message.id.toString()}
                                                     >
                                                         <span className="text-gray-500 text-xs">
                                                             {message.sender}
