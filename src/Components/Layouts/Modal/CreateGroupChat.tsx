@@ -36,7 +36,7 @@ const CreateGroupChat = () => {
         }
         createNewGroupBox({
             name,
-            receiverIds: activeIds
+            participants: activeIds
         }).then((res) => {
             closeModal();
             nav(`/${res.chatBox.id}`, {
