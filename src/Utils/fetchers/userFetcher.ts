@@ -1,4 +1,4 @@
 import {anAuthFetch} from "@chatUtils/apiFetchers.ts";
 
-const basePath = "/user";
+const basePath = "/auth/users";
 export const getOtherUsers = () => anAuthFetch(basePath, null, "GET");

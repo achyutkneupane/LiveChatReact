@@ -16,15 +16,16 @@ const CreateGroupChat = () => {
     const [users, setUsers] = useState<UserResponse[]>([]);
 
     const [name, setName] = useState<string>("");
-    const [activeIds, setActiveIds] = useState<string[]>([]);
+    const [activeIds, setActiveIds] = useState<number[]>([]);
     const openModal = () => setShowModal(true);
     const closeModal = () => setShowModal(false);
 
     useEffect(() => {
         showModal ? getOtherUsers().then((res : {
-            users: UserResponse[];
+            data: UserResponse[];
         }) => {
-            setUsers(res.users);
+            console.log(res.data);
+            setUsers(res.data);
         }) : setActiveIds([]);
     }, [showModal]);
 
@@ -38,7 +39,7 @@ const CreateGroupChat = () => {
             receiverIds: activeIds
         }).then((res) => {
             closeModal();
-            nav(`/${res.chatBox._id}`, {
+            nav(`/${res.chatBox.id}`, {
                 state: {
                     title: res.chatBox.name
                 }
@@ -64,29 +65,29 @@ const CreateGroupChat = () => {
                                    onChange={(e) => setName(e.target.value)}
                             />
                         </div>
-                        {users.length > 0 && users.map((user) => (
+                        {users?.length > 0 && users?.map((user) => (
                             <div
-                                className={`flex flex-row justify-between items-center p-2 rounded-xl cursor-pointer ${activeIds.includes(user._id) ? "bg-primary" : ""}`}
-                                key={user._id}
+                                className={`flex flex-row justify-between items-center p-2 rounded-xl cursor-pointer ${activeIds.includes(user.id) ? "bg-primary" : ""}`}
+                                key={user.id}
                                 onClick={() => {
-                                    if(activeIds.includes(user._id)) {
-                                        setActiveIds(activeIds.filter((id) => id !== user._id));
+                                    if(activeIds.includes(user.id)) {
+                                        setActiveIds(activeIds.filter((id) => id !== user.id));
                                     } else {
-                                        setActiveIds([...activeIds, user._id]);
+                                        setActiveIds([...activeIds, user.id]);
                                     }
                                 }}
                             >
                                 <div className="flex flex-row justify-start items-center gap-2">
-                                    <div className={`w-12 h-12 rounded-full flex justify-center items-center text-white text-2xl ${activeIds.includes(user._id) ? "bg-white" : "bg-primary"}`}>
-                                        <h1 className={`text-2xl text-center ${activeIds.includes(user._id) ? "text-primary" : "text-white"}`}>
+                                    <div className={`w-12 h-12 rounded-full flex justify-center items-center text-white text-2xl ${activeIds.includes(user.id) ? "bg-white" : "bg-primary"}`}>
+                                        <h1 className={`text-2xl text-center ${activeIds.includes(user.id) ? "text-primary" : "text-white"}`}>
                                             {user.firstName[0]}
                                         </h1>
                                     </div>
                                     <div className="flex flex-col justify-center items-start">
-                                        <div className={`text-xl ${activeIds.includes(user._id) ? "text-white" : "text-primary"}`}>
+                                        <div className={`text-xl ${activeIds.includes(user.id) ? "text-white" : "text-primary"}`}>
                                             {fullName(user.firstName, user.middleName, user.lastName)}
                                         </div>
-                                        <p className={`text-xs ${activeIds.includes(user._id) ? "text-gray-300" : "text-gray-500"}`}>
+                                        <p className={`text-xs ${activeIds.includes(user.id) ? "text-gray-300" : "text-gray-500"}`}>
                                             {user.username}
                                         </p>
                                     </div>

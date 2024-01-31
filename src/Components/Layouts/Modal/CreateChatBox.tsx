@@ -14,26 +14,26 @@ const CreateChatBox = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
 
     const [users, setUsers] = useState<UserResponse[]>([]);
-    const [activeId, setActiveId] = useState<string>("");
+    const [activeId, setActiveId] = useState<number>(0);
     const openModal = () => setShowModal(true);
     const closeModal = () => setShowModal(false);
 
     useEffect(() => {
         showModal ? getOtherUsers().then((res : {
-            users: UserResponse[];
+            data: UserResponse[];
         }) => {
-            setUsers(res.users);
-        }) : setActiveId("");
+            setUsers(res.data);
+        }) : setActiveId(0);
     }, [showModal]);
 
     const createChatBox = () => {
-        if(activeId == "") {
+        if(activeId == 0) {
             toast.error("Select Recipient first!");
             return;
         }
         createNewBox(activeId).then((res) => {
             closeModal();
-            nav(`/${res.chatBox._id}`, {
+            nav(`/${res.chatBox.id}`, {
                 state: {
                     title: res.chatBox.name
                 }
@@ -52,23 +52,23 @@ const CreateChatBox = () => {
             {showModal && (
                 <>
                     <ModalLayout closeModal={closeModal}>
-                        {users.length > 0 && users.map((user) => (
+                        {users?.length > 0 && users?.map((user) => (
                             <div
-                                className={`flex flex-row justify-between items-center py-2 px-4 rounded-xl cursor-pointer ${activeId === user._id ? "bg-primary" : ""}`}
-                                key={user._id}
-                                onClick={() => setActiveId(user._id)}
+                                className={`flex flex-row justify-between items-center py-2 px-4 rounded-xl cursor-pointer ${activeId === user.id ? "bg-primary" : ""}`}
+                                key={user.id}
+                                onClick={() => setActiveId(user.id)}
                             >
                                 <div className="flex flex-row justify-start items-center gap-2">
-                                    <div className={`w-12 h-12 rounded-full flex justify-center items-center text-white text-2xl ${activeId === user._id ? "bg-white" : "bg-primary"}`}>
-                                        <h1 className={`text-2xl text-center ${activeId === user._id ? "text-primary" : "text-white"}`}>
+                                    <div className={`w-12 h-12 rounded-full flex justify-center items-center text-white text-2xl ${activeId === user.id ? "bg-white" : "bg-primary"}`}>
+                                        <h1 className={`text-2xl text-center ${activeId === user.id ? "text-primary" : "text-white"}`}>
                                             {user.firstName[0]}
                                         </h1>
                                     </div>
                                     <div className="flex flex-col justify-center items-start">
-                                        <div className={`text-xl ${activeId === user._id ? "text-white" : "text-primary"}`}>
+                                        <div className={`text-xl ${activeId === user.id ? "text-white" : "text-primary"}`}>
                                             {fullName(user.firstName, user.middleName, user.lastName)}
                                         </div>
-                                        <p className={`text-xs ${activeId === user._id ? "text-gray-300" : "text-gray-500"}`}>
+                                        <p className={`text-xs ${activeId === user.id ? "text-gray-300" : "text-gray-500"}`}>
                                             {user.username}
                                         </p>
                                     </div>
@@ -76,8 +76,8 @@ const CreateChatBox = () => {
                             </div>
                         ))}
                         <button
-                            className={`w-full h-10 bg-primary rounded-md text-white mt-4 ${activeId === "" ? "opacity-50 cursor-not-allowed" : ""}`}
-                            disabled={activeId === ""}
+                            className={`w-full h-10 bg-primary rounded-md text-white mt-4 ${activeId === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+                            disabled={activeId === 0}
                             onClick={createChatBox}
                         >
                             Start Chat
