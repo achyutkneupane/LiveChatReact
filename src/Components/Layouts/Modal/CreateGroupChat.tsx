@@ -30,8 +30,16 @@ const CreateGroupChat = () => {
     }, [showModal]);
 
     const createChatBox = () => {
+        if(name === "") {
+            toast.error("Enter Group Name first!");
+            return;
+        }
         if(activeIds.length === 0) {
             toast.error("Select Recipient first!");
+            return;
+        }
+        if(activeIds.length === 1) {
+            toast.error("Select more than one recipient!");
             return;
         }
         createNewGroupBox({
@@ -39,9 +47,9 @@ const CreateGroupChat = () => {
             participants: activeIds
         }).then((res) => {
             closeModal();
-            nav(`/${res.chatBox.id}`, {
+            nav(`/${res.data.id}`, {
                 state: {
-                    title: res.chatBox.name
+                    title: res.data.name
                 }
             });
         });

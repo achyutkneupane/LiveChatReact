@@ -33,9 +33,9 @@ const CreateChatBox = () => {
         }
         createNewBox(activeId).then((res) => {
             closeModal();
-            nav(`/${res.chatBox.id}`, {
+            nav(`/${res.data.id}`, {
                 state: {
-                    title: res.chatBox.name
+                    title: res.data.name
                 }
             });
         });
